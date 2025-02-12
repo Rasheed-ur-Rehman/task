@@ -281,3 +281,71 @@ function hello_elementor_get_theme_notifications(): ThemeNotifications {
 }
 
 hello_elementor_get_theme_notifications();
+function hs_register_projects() {
+    register_post_type('projects', [
+        'labels' => [
+            'name' => 'Projects',
+            'singular_name' => 'Project',
+        ],
+        'public' => true,
+        'has_archive' => true,
+        'supports' => ['title', 'editor', 'thumbnail'],
+    ]);
+
+    register_taxonomy('project-type', 'projects', [
+        'labels' => [
+            'name' => 'Project Types',
+            'singular_name' => 'Project Type',
+        ],
+        'public' => true,
+        'hierarchical' => true,
+    ]);
+}
+add_action('init', 'hs_register_projects');
+
+
+function hs_get_projects_ajax() {
+    $is_logged_in = is_user_logged_in();
+    $posts_per_page = $is_logged_in ? 6 : 3;
+
+    $args = [
+        'post_type' => 'projects',
+        'posts_per_page' => $posts_per_page,
+        'tax_query' => [
+            [
+                'taxonomy' => 'project-type',
+                'field' => 'slug',
+                'terms' => 'architecture',
+            ],
+        ],
+    ];
+
+    $query = new WP_Query($args);
+    $projects = [];
+
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            $projects[] = [
+                'id' => get_the_ID(),
+                'title' => get_the_title(),
+                'link' => get_permalink(),
+            ];
+        }
+    }
+
+    wp_send_json(['success' => true, 'data' => $projects]);
+}
+add_action('wp_ajax_hs_get_projects', 'hs_get_projects_ajax');
+add_action('wp_ajax_nopriv_hs_get_projects', 'hs_get_projects_ajax');
+
+
+function hs_give_me_coffee() {
+    $response = wp_remote_get('https://coffee.alexflipnote.dev/random.json');
+    if (is_wp_error($response)) {
+        return 'Failed to fetch coffee.';
+    }
+    $body = wp_remote_retrieve_body($response);
+    $data = json_decode($body, true);
+    return $data['file'];
+}
