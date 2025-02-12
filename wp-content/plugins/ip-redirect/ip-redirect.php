@@ -9,7 +9,7 @@ Author: Your Name
 function hs_redirect_by_ip() {
     $user_ip = $_SERVER['REMOTE_ADDR'];
     if (strpos($user_ip, '77.29') === 0) {
-        wp_redirect('https://example.com'); // Replace with your desired URL
+        wp_redirect('https://rasheed-developer.site/'); // Replace with your desired URL
         exit;
     }
 }

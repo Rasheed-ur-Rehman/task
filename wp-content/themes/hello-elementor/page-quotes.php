@@ -1,4 +1,7 @@
 <?php
+/*
+Template Name: Kanye Quotes
+*/
 get_header();
 
 $quotes = [];
@@ -22,3 +25,4 @@ if (!empty($quotes)) {
 }
 
 get_footer();
+

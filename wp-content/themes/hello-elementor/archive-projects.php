@@ -1,5 +1,7 @@
 <?php
 get_header();
+
+
 $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 $args = [
     'post_type' => 'projects',

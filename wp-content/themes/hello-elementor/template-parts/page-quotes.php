@@ -1,5 +1,11 @@
 <?php
+/*
+Template Name: Kanye Quotes
+*/
 get_header();
+
+
+echo "This is rasheed Ur Rehman";
 
 $quotes = [];
 for ($i = 0; $i < 5; $i++) {
@@ -22,3 +28,8 @@ if (!empty($quotes)) {
 }
 
 get_footer();
+
+echo '<pre>';
+print_r($response);
+echo '</pre>';
+exit;
